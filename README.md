@@ -1,7 +1,7 @@
 # 📘 API Documentation for Admin Management API
 
 ## Overview
-هذه الـ API توفّر أدوات لإدارة علاقة المدراء بالمستخدمين والتذاكر في نظام إداري باستخدام Laravel.
+This API provides tools for managing the relationship between managers, users, and tickets in an administrative system using Laravel.
 
 ## Base URL
 ```
@@ -9,13 +9,13 @@ http://localhost:8000/api
 ```
 
 ## Authentication
-استخدم Bearer Token في الهيدر:
+Use a Bearer Token in the header:
 ```
 Authorization: Bearer {your_token}
 ```
 
 ## Rate Limiting
-لا يوجد قيود حالياً.
+There are currently no restrictions.
 
 ## Error Handling
 - 200: Success
