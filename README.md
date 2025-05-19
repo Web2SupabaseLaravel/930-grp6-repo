@@ -2,7 +2,7 @@
 
 ## Overview
 
-This API handles admin accounts and their dashboards in an event management system. Admins are stored in a unified `users` table, and linked to their individual `admin_dashboard` records.
+This API handles admin accounts and their dashboards in an event management system. Admins are stored in a unified `Admin` table, and linked to their individual `admin_dashboard` records.
 
 ## Base URL
 

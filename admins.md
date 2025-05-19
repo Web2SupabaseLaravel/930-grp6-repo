@@ -1,6 +1,6 @@
 # Admins API
 
-Manage admin users (stored in `users` table with role = 'admin').
+Manage admin users (stored in `Admin` table with role = 'admin').
 
 ---
 
@@ -56,6 +56,6 @@ Manage admin users (stored in `users` table with role = 'admin').
 ### Error Example:
 ```json
 {
-  "message": "No query results for model [User]"
+  "message": "No query results for model [Admin]"
 }
 ```
