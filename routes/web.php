@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminDashboardController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::resource('admins', AdminController::class);
+Route::resource('admin_dashboards', AdminDashboardController::class);

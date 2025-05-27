@@ -1,37 +1,78 @@
-# API Documentation for Event Admin Management
+
+# Event Management System API Documentation
 
 ## Overview
+This Laravel-based API allows you to manage admins and admin dashboards, covering full CRUD operations.
 
-This API handles admin accounts and their dashboards in an event management system. Admins are stored in a unified `Admin` table, and linked to their individual `admin_dashboard` records.
+## Table of Contents
+- Setup Instructions
+- API Endpoints
+  - Admin Management
+  - Admin Dashboards
+- Usage Examples
 
-## Base URL
+## Setup Instructions
+1. Clone the repository:
+   ```
+   git clone https://github.com/Web2SupabaseLaravel/930-grp6-repo.git
+   ```
+2. Install dependencies:
+   ```
+   composer install
+   ```
+3. Configure .env:
+   ```
+   cp .env.example .env
+   php artisan key:generate
+   ```
+4. Run migrations:
+   ```
+   php artisan migrate
+   ```
+5. Serve the app:
+   ```
+   php artisan serve
+   ```
 
+## API Endpoints
+
+### Admin Management
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | /admins | List all admins |
+| POST | /admins | Create a new admin |
+| PUT | /admins/{id} | Update an admin |
+| DELETE | /admins/{id} | Delete an admin |
+
+### Admin Dashboards
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | /admin_dashboards | List all dashboards |
+| POST | /admin_dashboards | Create a new dashboard |
+| PUT | /admin_dashboards/{id} | Update a dashboard |
+| DELETE | /admin_dashboards/{id} | Delete a dashboard |
+
+## Usage Examples
+
+### Create Admin
 ```
-http://localhost:8000/api
+POST /admins
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "password123"
+}
 ```
 
-## Authentication
+### Create Admin Dashboard
+```
+POST /admin_dashboards
+{
+  "dashboard": "Event Summary",
+  "event_registrations": "150",
+  "revenue": "$2000",
+  "attendee_demographics": "Young Adults",
+  "admin_id": 1
+}
+```
 
-Currently: **No authentication** required (public access for development).  
-Future plan: Use **Bearer Tokens** via Laravel Sanctum or Passport.
-
-## Rate Limiting
-
-No rate limits currently applied.
-
-## Error Handling
-
-| Status Code | Description               |
-|-------------|---------------------------|
-| 200         | Success                   |
-| 201         | Created                   |
-| 400         | Bad Request               |
-| 401         | Unauthorized              |
-| 404         | Not Found                 |
-| 422         | Validation Error          |
-| 500         | Internal Server Error     |
-
-## Available Resources
-
-- [Admins](./admins.md)
-- [Admin Dashboards](./admin-dashboards.md)

@@ -1,18 +1,11 @@
 <?php
 
 namespace App\Models;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-class Admin extends User
+class Admin extends Model
 {
-    protected static function booted()
-    {
-        static::addGlobalScope('admin', function ($query) {
-            $query->where('role', 'admin');
-        });
-    }
-
-    public function dashboard()
-    {
-        return $this->hasOne(AdminDashboard::class, 'admin_id');
-    }
+    use HasFactory;
+    protected $fillable = ['name', 'email', 'password'];
 }
