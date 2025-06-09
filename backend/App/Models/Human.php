@@ -10,6 +10,7 @@ class Human extends Model
     public $incrementing = true;
     public $timestamps = false;
     protected $keyType = 'int';
+
     protected $fillable = [
         'human_id',
         'name',
@@ -17,9 +18,10 @@ class Human extends Model
         'password',
         'location',
         'email',
-        'creditcard',
+        'credit_card', // ✅ اسم العمود الصحيح
     ];
 
+    // تشفير كلمة المرور تلقائيًا عند الحفظ
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = bcrypt($value);

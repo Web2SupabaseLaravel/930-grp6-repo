@@ -9,8 +9,8 @@ import AdminCRUD from './components/admins/Admin';
 import OrganizerCRUD from './components/organizers/Organizer';
 import AttendeeCRUD from './components/attendees/Attendee';
 import TicketInventory from './components/ticket/TicketInventory';
-import EventDetails from './components/events/EventDetails';
-
+import SignUp from './components/signup/Signup'; 
+import Signin from './components/signin/Signin'; 
 import './App.css';
 
 const Tickets = () => <div>Tickets Page</div>;
@@ -32,7 +32,8 @@ function App() {
           <Route path="/attendees" element={<AttendeeCRUD />} />
           <Route path="/events/create" element ={<CreateEvent/>}/>
           <Route path="/ticket/inventory"element={<TicketInventory/>}/>
-          <Route path="/events/:eventId" element={<EventDetails />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/signin" element={<Signin />} />
         </Routes>
       </Layout>
     </Router>

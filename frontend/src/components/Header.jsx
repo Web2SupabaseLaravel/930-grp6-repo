@@ -1,5 +1,6 @@
 import React from 'react';
 import { Search, Bell, User } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   return (
@@ -23,7 +24,7 @@ const Header = () => {
         <div className="flex items-center space-x-4">
           <span className="text-sm text-gray-200">admin</span>
           <button className="w-8 h-8 rounded-full bg-card-bg flex items-center justify-center">
-            <User size={20} className="text-gray-400" />
+            <Link to="/signin"><User size={20} className="text-gray-400" /></Link>
           </button>
         </div>
       </div>

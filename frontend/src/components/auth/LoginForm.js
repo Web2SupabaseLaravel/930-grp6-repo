@@ -6,7 +6,7 @@ function LoginForm() {
   const { login } = useContext(UserContext);
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
@@ -18,7 +18,7 @@ function LoginForm() {
       const res = await fetch('http://127.0.0.1:8000/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ name, password }),
       });
 
       if (!res.ok) {
@@ -56,11 +56,11 @@ function LoginForm() {
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
       <label>
-        Email:
+        Name:
         <input
-          type="email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
+          type="text"
+          value={name}
+          onChange={e => setName(e.target.value)}
           required
         />
       </label>

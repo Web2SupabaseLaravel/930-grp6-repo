@@ -8,7 +8,7 @@ function EventsList() {
 
   const loadEvents = async () => {
     try {
-      const res = await fetch(apiBase); 
+      const res = await fetch(apiBase);
       if (!res.ok) throw new Error('Failed to load events');
       const data = await res.json();
       setEvents(data.data || []);
@@ -52,26 +52,28 @@ function EventsList() {
                   <h3 className="text-lg font-semibold text-accent-purple">{event.title}</h3>
                   <p className="text-gray-400 text-sm">{event.category}</p>
                 </div>
-                  <div className="space-x-2">
-                    <button
-                      onClick={() => navigate(`/events/${event.event_id}`)}
-                      className="text-sm px-3 py-1 rounded bg-gray-600 hover:bg-gray-500 transition"
-                    >
-                      Details
-                    </button>
-                    <button
-                      onClick={() => navigate(`/events/create?id=${event.event_id}`)}
-                      className="text-sm px-3 py-1 rounded bg-blue-600 hover:bg-blue-500 transition"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => deleteEvent(event.event_id)}
-                      className="text-sm px-3 py-1 rounded bg-red-600 hover:bg-red-500 transition"
-                    >
-                      Delete
-                    </button>
-                  </div>
+
+                <div className="space-x-2">
+                  {/* زر Event Details ينقلك إلى مسار ثابت /eventdetails */}
+                  <button
+                    onClick={() => navigate('/eventdetails')}
+                    className="text-sm px-3 py-1 rounded bg-green-600 hover:bg-green-500 transition"
+                  >
+                    Event Details
+                  </button>
+                  <button
+                    onClick={() => navigate(`/events/create?id=${event.event_id}`)}
+                    className="text-sm px-3 py-1 rounded bg-blue-600 hover:bg-blue-500 transition"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => deleteEvent(event.event_id)}
+                    className="text-sm px-3 py-1 rounded bg-red-600 hover:bg-red-500 transition"
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
             </div>
           ))
