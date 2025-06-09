@@ -96,29 +96,37 @@ public function index(Request $request)
      * )
      */
     public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'location' => 'required|string|max:255',
-            'title' => 'required|string|max:255',
-            'type' => 'required|string|max:50',
-            'category' => 'required|string|max:50',
-            'description' => 'nullable|string',
-            'event_img' => 'nullable|string',
-            'revenue' => 'nullable|numeric',
-            'start_day' => 'required|date',
-            'end_day' => 'required|date|after_or_equal:start_day',
-            'start_hour' => 'required|string',
-            'end_hour' => 'required|string',
-            'event_img' => 'nullable|string',
-        ]);
+{
+    $validator = Validator::make($request->all(), [
+        'location' => 'required|string|max:255',
+        'title' => 'required|string|max:255',
+        'type' => 'required|string|max:50',
+        'category' => 'required|string|max:50',
+        'description' => 'nullable|string',
+        'event_img' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        'revenue' => 'nullable|numeric',
+        'start_day' => 'required|date',
+        'end_day' => 'required|date|after_or_equal:start_day',
+        'start_hour' => 'required|string',
+        'end_hour' => 'required|string',
+    ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-        $event = Event::create($request->all());
-        return response()->json($event, 201);
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 422);
     }
+
+    $eventData = $request->except('event_img');
+
+    if ($request->hasFile('event_img')) {
+        $imagePath = $request->file('event_img')->store('uploads', 'public');
+        $eventData['event_img'] = '/storage/' . $imagePath;
+    }
+
+    $event = Event::create($eventData);
+
+    return response()->json(['data' => $event], 201);
+}
+
     /**
      * @OA\Get(
      *     path="/api/events/{id}",
@@ -139,14 +147,17 @@ public function index(Request $request)
      *     @OA\Response(response=404, description="Event not found")
      * )
      */
-    public function show($id)
-    {
-        $event = Event::find($id);
-        if (!$event) {
-            return response()->json(['error' => 'Event not found'], 404);
-        }
-        return response()->json($event, 200);
+public function show($id)
+{
+    $event = Event::where('event_id', $id)->first();
+
+    if (!$event) {
+        return response()->json(['error' => 'Event not found'], 404);
     }
+
+    return response()->json(['data' => $event], 200);
+}
+
     /**
      * @OA\Put(
      *     path="/api/events/{id}",

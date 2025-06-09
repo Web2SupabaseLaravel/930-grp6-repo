@@ -18,7 +18,6 @@ const websiteVisitors = [
 const Dashboard = () => {
   return (
     <div className="space-y-6">
-      {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {statsCards.map((stat) => (
           <Card key={stat.title} className="bg-card-bg border-none">
@@ -34,7 +33,6 @@ const Dashboard = () => {
         ))}
       </div>
 
-      {/* Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card className="bg-card-bg border-none">
           <Text className="text-gray-400 mb-4">Website Visitors</Text>
@@ -65,7 +63,6 @@ const Dashboard = () => {
         </Card>
       </div>
 
-      {/* Orders Table */}
       <Card className="bg-card-bg border-none">
         <div className="flex justify-between items-center mb-4">
           <Text className="text-gray-400">Orders Status</Text>
