@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Access Panel</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background: #1f1f1f;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 1100px;
+      background: #2e2e2e;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+    }
+
+    h2 {
+      text-align: center;
+      color: #ff6b81;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-top: 30px;
+    }
+
+    .form-box {
+      background: #393939;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    .form-box label {
+      display: block;
+      margin: 10px 0 5px;
+      color: #ccc;
+    }
+
+    .form-box input {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      background: #2b2b2b;
+      color: white;
+    }
+
+    .form-box button {
+      margin-top: 15px;
+      padding: 10px 15px;
+      width: 100%;
+      background-color: #ff6b81;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .form-box button:hover {
+      background-color: #ff4757;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 25px;
+      border-collapse: collapse;
+      background-color: #444;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    th,
+    td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #555;
+    }
+
+    th {
+      background-color: #ff6b81;
+      color: white;
+    }
+
+    tr:hover {
+      background-color: #3a3a3a;
+    }
+
+    .table-title {
+      margin-top: 50px;
+      font-size: 18px;
+      color: #f8f8f8;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrapper">
+    <h2>Admin Access Management</h2>
+
+    <div class="form-grid">
+      <!-- Form: Admin -> Human -->
+      <div class="form-box">
+        <h3>Add Access to Human</h3>
+        <form id="formHuman">
+          <label for="admin_id_human">Admin ID</label>
+          <input type="number" id="admin_id_human" required />
+
+          <label for="human_id">Human ID</label>
+          <input type="number" id="human_id" required />
+
+          <button type="submit">Submit Human Access</button>
+        </form>
+      </div>
+
+      <!-- Form: Admin -> Ticket -->
+      <div class="form-box">
+        <h3>Add Access to Ticket</h3>
+        <form id="formTicket">
+          <label for="admin_id_ticket">Admin ID</label>
+          <input type="number" id="admin_id_ticket" required />
+
+          <label for="ticket_id">Ticket ID</label>
+          <input type="number" id="ticket_id" required />
+
+          <button type="submit">Submit Ticket Access</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="table-title">admin_human_manage Table</div>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Admin ID</th>
+          <th>Human ID</th>
+        </tr>
+      </thead>
+      <tbody id="tableHuman"></tbody>
+    </table>
+
+    <div class="table-title">admin_ticket_access Table</div>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Admin ID</th>
+          <th>Ticket ID</th>
+        </tr>
+      </thead>
+      <tbody id="tableTicket"></tbody>
+    </table>
+  </div>
+
+  <script>
+    async function loadTables() {
+      const humanRes = await fetch('http://127.0.0.1:8000/api/admin/humans');
+      const humanData = await humanRes.json();
+      const humanBody = document.getElementById("tableHuman");
+      humanBody.innerHTML = "";
+      humanData.forEach(item => {
+        humanBody.innerHTML += `<tr><td>${item.id}</td><td>${item.admin_id}</td><td>${item.human_id}</td></tr>`;
+      });
+
+      const ticketRes = await fetch('http://127.0.0.1:8000/api/admin/tickets');
+      const ticketData = await ticketRes.json();
+      const ticketBody = document.getElementById("tableTicket");
+      ticketBody.innerHTML = "";
+      ticketData.forEach(item => {
+        ticketBody.innerHTML += `<tr><td>${item.id}</td><td>${item.admin_id}</td><td>${item.ticket_id}</td></tr>`;
+      });
+    }
+
+    document.getElementById("formHuman").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      await fetch('http://127.0.0.1:8000/api/admin/humans', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          admin_id: document.getElementById("admin_id_human").value,
+          human_id: document.getElementById("human_id").value
+        })
+      });
+      document.getElementById("formHuman").reset();
+      loadTables();
+    });
+
+    document.getElementById("formTicket").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      await fetch('http://127.0.0.1:8000/api/admin/tickets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          admin_id: document.getElementById("admin_id_ticket").value,
+          ticket_id: document.getElementById("ticket_id").value
+        })
+      });
+      document.getElementById("formTicket").reset();
+      loadTables();
+    });
+
+    loadTables();
+  </script>
+</body>
+
+</html>
