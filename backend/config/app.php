@@ -95,17 +95,10 @@ return [
     |
     */
 
-<<<<<<< HEAD
-    'cipher' => 'AES-256-CBC',
-
-    'key' => env('APP_KEY'),
-
-=======
     'key' => env('APP_KEY'),
 
     'cipher' => 'AES-256-CBC',
 
->>>>>>> event-repo/main
     'previous_keys' => [
         ...array_filter(
             explode(',', env('APP_PREVIOUS_KEYS', ''))
@@ -132,11 +125,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-<<<<<<< HEAD
     | Service Providers
-=======
-    | Autoloaded Service Providers
->>>>>>> event-repo/main
     |--------------------------------------------------------------------------
     |
     | The service providers listed here will be automatically loaded on the
@@ -146,10 +135,6 @@ return [
     */
 
     'providers' => [
-<<<<<<< HEAD
-=======
-
->>>>>>> event-repo/main
         /*
          * Laravel Framework Service Providers...
          */
@@ -177,7 +162,6 @@ return [
         Illuminate\View\ViewServiceProvider::class,
 
         /*
-<<<<<<< HEAD
          * Package Service Providers...
          */
         L5Swagger\L5SwaggerServiceProvider::class,
@@ -190,15 +174,6 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\SwaggerServiceProvider::class,
-=======
-         * Application Service Providers...
-         */
-        App\Providers\RouteServiceProvider::class,
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\BroadcastServiceProvider::class,
->>>>>>> event-repo/main
     ],
 
 ];

@@ -35,11 +35,7 @@ function CreateEvent() {
   const apiBase = 'http://localhost:8000/api/events';
   const navigate = useNavigate();
   const location = useLocation();
-<<<<<<< HEAD
   const [formData, setFormData] = useState(initialFormData);
-=======
-  const [formData,  setFormData] = useState(initialFormData);
->>>>>>> event-repo/main
   const [editId, setEditId] = useState(null);
 
   useEffect(() => {
@@ -74,26 +70,44 @@ function CreateEvent() {
     }
   };
 
-<<<<<<< HEAD
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const { name, value, files } = e.target;
+
+    if (name === 'event_img') {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: files[0],
+      }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const payload = {
-      ...formData,
-      location: `${formData.locationCoords.lat},${formData.locationCoords.lng}`,
-    };
-    delete payload.locationCoords;
+
+    const form = new FormData();
+    form.append('title', formData.title);
+    form.append('type', formData.type);
+    form.append('organizer', formData.organizer);
+    form.append('category', formData.category);
+    form.append('description', formData.description);
+    form.append('start_day', formData.start_day);
+    form.append('end_day', formData.end_day);
+    form.append('start_hour', formData.start_hour);
+    form.append('end_hour', formData.end_hour);
+    form.append('location', `${formData.locationCoords.lat},${formData.locationCoords.lng}`);
+
+    if (formData.event_img) {
+      form.append('event_img', formData.event_img);
+    }
 
     try {
       const res = await fetch(editId ? `${apiBase}/${editId}` : apiBase, {
-        method: editId ? 'PUT' : 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        method: editId ? 'PUT' : 'POST',  
+        body: form,
       });
+
       if (!res.ok) {
         const err = await res.json();
         alert(JSON.stringify(err.errors || err.message || 'Error saving event'));
@@ -104,58 +118,6 @@ function CreateEvent() {
       alert('Network error: ' + err.message);
     }
   };
-=======
-const handleChange = (e) => {
-  const { name, value, files } = e.target;
-
-  if (name === 'event_img') {
-    setFormData((prev) => ({
-      ...prev,
-      [name]: files[0],
-    }));
-  } else {
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  }
-};
-
-const handleSubmit = async (e) => {
-  e.preventDefault();
-
-  const form = new FormData();
-  form.append('title', formData.title);
-  form.append('type', formData.type);
-  form.append('organizer', formData.organizer);
-  form.append('category', formData.category);
-  form.append('description', formData.description);
-  form.append('start_day', formData.start_day);
-  form.append('end_day', formData.end_day);
-  form.append('start_hour', formData.start_hour);
-  form.append('end_hour', formData.end_hour);
-  form.append('location', `${formData.locationCoords.lat},${formData.locationCoords.lng}`);
-
-  if (formData.event_img) {
-    form.append('event_img', formData.event_img);
-  }
-
-  try {
-    const res = await fetch(editId ? `${apiBase}/${editId}` : apiBase, {
-      method: editId ? 'PUT' : 'POST',  
-      body: form,
-
-    });
-
-    if (!res.ok) {
-      const err = await res.json();
-      alert(JSON.stringify(err.errors || err.message || 'Error saving event'));
-    } else {
-      navigate('/events');
-    }
-  } catch (err) {
-    alert('Network error: ' + err.message);
-  }
-};
-
->>>>>>> event-repo/main
 
   return (
     <form className="container-fluid mt-4" onSubmit={handleSubmit}>
@@ -200,20 +162,20 @@ const handleSubmit = async (e) => {
       </div>
 
       <div className="mb-3">
-        <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Description" rows={4} className="form-control a placeholder-white" />
+        <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Description" className="form-control a placeholder-white" rows="4"></textarea>
       </div>
 
-      <div className="mb-3">
-        <div className="bg-secondary a" style={{ height: '300px', borderRadius: '8px', width: '100%' }}>
-          <MapContainer center={formData.locationCoords} zoom={13} style={{ height: '100%', width: '100%' }}>
-            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-            <DraggableMarker position={formData.locationCoords} onChangePosition={(pos) => setFormData(f => ({ ...f, locationCoords: pos }))} />
-          </MapContainer>
-        </div>
+      <div className="mb-3" style={{ height: '400px' }}>
+        <MapContainer center={formData.locationCoords} zoom={13} style={{ height: '100%', width: '100%' }}>
+          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+          <DraggableMarker position={formData.locationCoords} onChangePosition={(pos) => setFormData(prev => ({ ...prev, locationCoords: pos }))} />
+        </MapContainer>
       </div>
 
-      <div className="mb-3">
-        <button type="submit" className="btn btn-primary w-100">Create</button>
+      <div className="text-center">
+        <button type="submit" className="btn btn-primary px-4">
+          {editId ? 'Update Event' : 'Create Event'}
+        </button>
       </div>
     </form>
   );
