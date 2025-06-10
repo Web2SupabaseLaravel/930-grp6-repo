@@ -21,10 +21,19 @@ const Header = () => {
           <Bell size={20} />
         </button>
         
+        <Link 
+          to="/signup" 
+          className="px-4 py-2 bg-accent-purple hover:bg-accent-purple-dark text-white rounded-lg transition-colors"
+        >
+          Sign up
+        </Link>
+        
         <div className="flex items-center space-x-4">
           <span className="text-sm text-gray-200">admin</span>
           <button className="w-8 h-8 rounded-full bg-card-bg flex items-center justify-center">
-            <Link to="/signin"><User size={20} className="text-gray-400" /></Link>
+            <Link to="/signin">
+              <User size={20} className="text-gray-400 hover:text-white transition-colors" />
+            </Link>
           </button>
         </div>
       </div>

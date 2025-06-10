@@ -54,7 +54,6 @@ function EventsList() {
                 </div>
 
                 <div className="space-x-2">
-                  {/* زر Event Details ينقلك إلى مسار ثابت /eventdetails */}
                   <button
                     onClick={() => navigate('/eventdetails')}
                     className="text-sm px-3 py-1 rounded bg-green-600 hover:bg-green-500 transition"

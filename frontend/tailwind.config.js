@@ -7,11 +7,13 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'dark-navy': '#0D0E12',
-        'accent-purple': ' #855BFC',
-        'accent-blue': '#0D0E12',
-        'card-bg': '#111C44',
-        'dark': '#121317',
+        'dark-navy': '#121317',
+        'card-bg': '#1E1F25',
+        'accent-purple': '#8B5CF6',
+      },
+      spacing: {
+        '64': '16rem',
+        '72': '18rem',
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
