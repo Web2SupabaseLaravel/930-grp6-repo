@@ -35,7 +35,11 @@ function CreateEvent() {
   const apiBase = 'http://localhost:8000/api/events';
   const navigate = useNavigate();
   const location = useLocation();
+<<<<<<< HEAD
   const [formData, setFormData] = useState(initialFormData);
+=======
+  const [formData,  setFormData] = useState(initialFormData);
+>>>>>>> event-repo/main
   const [editId, setEditId] = useState(null);
 
   useEffect(() => {
@@ -70,6 +74,7 @@ function CreateEvent() {
     }
   };
 
+<<<<<<< HEAD
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -99,6 +104,58 @@ function CreateEvent() {
       alert('Network error: ' + err.message);
     }
   };
+=======
+const handleChange = (e) => {
+  const { name, value, files } = e.target;
+
+  if (name === 'event_img') {
+    setFormData((prev) => ({
+      ...prev,
+      [name]: files[0],
+    }));
+  } else {
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  }
+};
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const form = new FormData();
+  form.append('title', formData.title);
+  form.append('type', formData.type);
+  form.append('organizer', formData.organizer);
+  form.append('category', formData.category);
+  form.append('description', formData.description);
+  form.append('start_day', formData.start_day);
+  form.append('end_day', formData.end_day);
+  form.append('start_hour', formData.start_hour);
+  form.append('end_hour', formData.end_hour);
+  form.append('location', `${formData.locationCoords.lat},${formData.locationCoords.lng}`);
+
+  if (formData.event_img) {
+    form.append('event_img', formData.event_img);
+  }
+
+  try {
+    const res = await fetch(editId ? `${apiBase}/${editId}` : apiBase, {
+      method: editId ? 'PUT' : 'POST',  
+      body: form,
+
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      alert(JSON.stringify(err.errors || err.message || 'Error saving event'));
+    } else {
+      navigate('/events');
+    }
+  } catch (err) {
+    alert('Network error: ' + err.message);
+  }
+};
+
+>>>>>>> event-repo/main
 
   return (
     <form className="container-fluid mt-4" onSubmit={handleSubmit}>

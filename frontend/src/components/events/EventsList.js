@@ -8,7 +8,11 @@ function EventsList() {
 
   const loadEvents = async () => {
     try {
+<<<<<<< HEAD
       const res = await fetch(apiBase); 
+=======
+      const res = await fetch(apiBase);
+>>>>>>> event-repo/main
       if (!res.ok) throw new Error('Failed to load events');
       const data = await res.json();
       setEvents(data.data || []);
@@ -52,7 +56,19 @@ function EventsList() {
                   <h3 className="text-lg font-semibold text-accent-purple">{event.title}</h3>
                   <p className="text-gray-400 text-sm">{event.category}</p>
                 </div>
+<<<<<<< HEAD
                 <div className="space-x-2">
+=======
+
+                <div className="space-x-2">
+                  {/* زر Event Details ينقلك إلى مسار ثابت /eventdetails */}
+                  <button
+                    onClick={() => navigate('/eventdetails')}
+                    className="text-sm px-3 py-1 rounded bg-green-600 hover:bg-green-500 transition"
+                  >
+                    Event Details
+                  </button>
+>>>>>>> event-repo/main
                   <button
                     onClick={() => navigate(`/events/create?id=${event.event_id}`)}
                     className="text-sm px-3 py-1 rounded bg-blue-600 hover:bg-blue-500 transition"
