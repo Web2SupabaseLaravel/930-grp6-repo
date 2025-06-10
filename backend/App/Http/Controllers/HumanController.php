@@ -34,12 +34,12 @@ class HumanController extends Controller
     }
 public function login(Request $request)
 {
-    $credentials = $request->validate([
-        'name' => 'required|string',
-        'password' => 'required|string',
+    $validated = $request->validate([
+        'email' => 'required|email',
+        'password' => 'required|string|min:6',
     ]);
 
-    $human = Human::where('name', $credentials['name'])->first();
+    $human = Human::where('email', $validated['email'])->first();
 
     if (!$human) {
         return response()->json([
@@ -48,7 +48,12 @@ public function login(Request $request)
         ], 404);
     }
 
-    if (!Hash::check($credentials['password'], $human->password)) {
+    // إضافة طباعة للتحقق
+    \Log::info('Input password: ' . $validated['password']);
+    \Log::info('Stored hash: ' . $human->password);
+    \Log::info('Check result: ' . Hash::check($validated['password'], $human->password));
+
+    if (!Hash::check($validated['password'], $human->password)) {
         return response()->json([
             'success' => false,
             'message' => 'Incorrect password'
@@ -58,7 +63,7 @@ public function login(Request $request)
     return response()->json([
         'success' => true,
         'message' => 'Login successful',
-        'human' => $human,
+        'user' => $human,
     ]);
 }
 

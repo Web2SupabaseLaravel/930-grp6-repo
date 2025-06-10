@@ -9,13 +9,10 @@ import AdminCRUD from './components/admins/Admin';
 import OrganizerCRUD from './components/organizers/Organizer';
 import AttendeeCRUD from './components/attendees/Attendee';
 import TicketInventory from './components/ticket/TicketInventory';
-import SignUp from './components/signup/Signup'; 
-import Signin from './components/signin/Signin'; 
+import SignUp from './components/signup/signup'; 
+import Signin from './components/signin/signin'; 
+import EventDetailsPage from './components/eventdetailes/eventdetailes'; 
 import './App.css';
-
-const Tickets = () => <div>Tickets Page</div>;
-const Organizers = () => <div>Organizers Page</div>;
-const Events = () => <CreateEvent/>;
 
 function App() {
   return (
@@ -23,15 +20,16 @@ function App() {
       <Layout>
         <Routes>
           <Route path="/" element={<Dashboard />} />
-          <Route path="/tickets" element={<Tickets />} />
-          <Route path="/organizers" element={<Organizers />} />
+          <Route path="/tickets" element={<div>Tickets Page</div>} />
+          <Route path="/organizers" element={<div>Organizers Page</div>} />
           <Route path="/events" element={<EventsList />} />
+          <Route path="/events/create" element={<CreateEvent />} />
           <Route path="/humans" element={<HumansCRUD />} />
           <Route path="/admins" element={<AdminCRUD />} />
           <Route path="/organizers" element={<OrganizerCRUD />} />
           <Route path="/attendees" element={<AttendeeCRUD />} />
-          <Route path="/events/create" element ={<CreateEvent/>}/>
-          <Route path="/ticket/inventory"element={<TicketInventory/>}/>
+          <Route path="/ticket/inventory" element={<TicketInventory />} />
+          <Route path="/eventdetails/:eventId" element={<EventDetailsPage />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<Signin />} />
         </Routes>
