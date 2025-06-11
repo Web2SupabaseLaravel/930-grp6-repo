@@ -2,9 +2,18 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Admin extends Model
 {
-    protected $table = 'admin'; 
+    use HasFactory;
+
+    protected $table = 'admin';
+    protected $primaryKey = 'admin_id';
+
+    public $incrementing = true;
+    protected $keyType = 'int';
+
+    protected $fillable = ['name', 'email'];
 }

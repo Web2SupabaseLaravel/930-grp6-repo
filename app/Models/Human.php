@@ -9,5 +9,8 @@ class Human extends Model
 {
     use HasFactory;
 
+    protected $table = 'admin_human_manage';
+    protected $primaryKey = 'id';
+
     protected $fillable = ['name', 'email', 'phone'];
 }
