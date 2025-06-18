@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import './signin.css'
 function Signin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -29,10 +29,10 @@ function Signin() {
         throw new Error(data.message || 'Login failed');
       }
 
-      // تخزين بيانات المستخدم في localStorage
+    
       localStorage.setItem('user', JSON.stringify(data.user));
       alert('Login successful!');
-      navigate('/dashboard'); // توجيه المستخدم بعد تسجيل الدخول
+      navigate('/');
 
     } catch (error) {
       setError(error.message);
@@ -41,50 +41,56 @@ function Signin() {
   };
 
   return (
-    <div className="w-[40vw] max-w-full mx-auto p-6 border border-gray-600 rounded-[20px] min-h-[50vh] flex flex-col justify-between">
-      <h2 className="text-2xl font-bold mb-4">Sign In</h2>
-      {error && <div className="text-red-500 mb-4">{error}</div>}
-      <form onSubmit={handleSignin} className="space-y-4">
-        <div>
-          <label className="block mb-1">Email</label>
-          <input
-            type="email"
-            className="w-full p-2 rounded bg-gray-800 border border-gray-700"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            autoComplete="email"
-          />
-        </div>
-        <div>
-          <label className="block mb-1">Password</label>
-          <input
-            type="password"
-            className="w-full p-2 rounded bg-gray-800 border border-gray-700"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            autoComplete="current-password"
-            minLength="6"
-          />
-        </div>
-        <div className="flex space-x-4">
-          <button
-            type="submit"
-            className="flex-1 bg-accent-purple py-2 rounded hover:bg-accent-purple/80 transition-colors"
-          >
-            Sign In
-          </button>
-          <button
-            type="button"
-            className="flex-1 bg-gray-600 py-2 rounded hover:bg-gray-700 transition-colors"
-            onClick={() => navigate('/signup')}
-          >
-            Sign Up
-          </button>
-        </div>
-      </form>
+<div className="signin-container">
+  <h2 className="signin-title">Sign In</h2>
+
+  {error && <div className="signin-error">{error}</div>}
+
+  <form onSubmit={handleSignin} className="signin-form">
+    <div className="input-group">
+      <label className="input-label">Email</label>
+      <input
+        type="email"
+        className="input-field"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+        autoComplete="email"
+      />
     </div>
+
+    <div className="input-group">
+      <label className="input-label">Password</label>
+      <input
+        type="password"
+        className="input-field"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+        autoComplete="current-password"
+        minLength="6"
+      />
+    </div>
+
+    <div className="button-group">
+      <button
+        type="submit"
+        onClick={() => navigate('/')}
+        className="btn btn-primary"
+      >
+        Sign In
+      </button>
+      <button
+        type="button"
+        onClick={() => navigate('/signup')}
+        className="btn btn-secondary"
+      >
+        Sign Up
+      </button>
+    </div>
+  </form>
+</div>
+
   );
 }
 

@@ -18,12 +18,8 @@ class Human extends Model
         'password',
         'location',
         'email',
-        'credit_card', // ✅ اسم العمود الصحيح
-    ];
+        'credit_card',
+        ];
 
-    // تشفير كلمة المرور تلقائيًا عند الحفظ
-    public function setPasswordAttribute($value)
-    {
-        $this->attributes['password'] = bcrypt($value);
-    }
+
 }

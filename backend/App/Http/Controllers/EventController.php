@@ -66,7 +66,49 @@ public function index(Request $request)
 
     $events = $query->paginate($perPage);
 
+    // تحويل مسار الصورة إلى رابط كامل
+    $events->getCollection()->transform(function ($event) {
+        $event->event_img = $event->event_img
+            ? asset('storage/' . $event->event_img)
+            : null;
+        return $event;
+    });
+
     return response()->json($events, 200);
+}
+
+public function store(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'location' => 'required|string|max:255',
+        'title' => 'required|string|max:255',
+        'type' => 'required|string|max:50',
+        'category' => 'required|string|max:50',
+        'description' => 'nullable|string',
+        'event_img' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        'revenue' => 'nullable|numeric',
+        'start_day' => 'required|date',
+        'end_day' => 'required|date|after_or_equal:start_day',
+        'start_hour' => 'required|string',
+        'end_hour' => 'required|string',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 422);
+    }
+
+    $eventData = $request->except('event_img');
+
+    if ($request->hasFile('event_img')) {
+        // حفظ الصورة داخل uploads في storage/app/public/uploads
+        $imagePath = $request->file('event_img')->store('uploads', 'public');
+        // نحفظ المسار النسبي فقط مثل "uploads/filename.jpg"
+        $eventData['event_img'] = $imagePath;
+    }
+
+    $event = Event::create($eventData);
+
+    return response()->json(['data' => $event], 201);
 }
 
 
@@ -95,37 +137,7 @@ public function index(Request $request)
      *     )
      * )
      */
-    public function store(Request $request)
-{
-    $validator = Validator::make($request->all(), [
-        'location' => 'required|string|max:255',
-        'title' => 'required|string|max:255',
-        'type' => 'required|string|max:50',
-        'category' => 'required|string|max:50',
-        'description' => 'nullable|string',
-        'event_img' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-        'revenue' => 'nullable|numeric',
-        'start_day' => 'required|date',
-        'end_day' => 'required|date|after_or_equal:start_day',
-        'start_hour' => 'required|string',
-        'end_hour' => 'required|string',
-    ]);
 
-    if ($validator->fails()) {
-        return response()->json(['errors' => $validator->errors()], 422);
-    }
-
-    $eventData = $request->except('event_img');
-
-    if ($request->hasFile('event_img')) {
-        $imagePath = $request->file('event_img')->store('uploads', 'public');
-        $eventData['event_img'] = '/storage/' . $imagePath;
-    }
-
-    $event = Event::create($eventData);
-
-    return response()->json(['data' => $event], 201);
-}
 
     /**
      * @OA\Get(

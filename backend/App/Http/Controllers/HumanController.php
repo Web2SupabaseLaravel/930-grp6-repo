@@ -9,29 +9,57 @@ use Illuminate\Support\Facades\Hash;
 class HumanController extends Controller
 {
     public function index()
-    {
-        return response()->json(Human::all());
-    }
+{
+    return response()->json(Human::all());
+}
 
-    // تسجيل مستخدم جديد (Sign Up)
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'name'       => 'required|string',
-            'age'        => 'required|integer|min:0',
-            'password'   => 'required|string|min:6',
-            'location'   => 'nullable|string',
-            'email'      => 'required|email|unique:human,email',
-            'creditcard' => 'nullable|string',
-        ]);
+public function store(Request $request)
+{
+    $validated = $request->validate([
+        'human_id'   => 'required|integer|unique:human,human_id',
+        'name'       => 'required|string',
+        'age'        => 'required|integer|min:0',
+        'password'   => 'required|string|min:6',
+        'location'   => 'nullable|string',
+        'email'      => 'required|email|unique:human,email',
+        'creditcard' => 'nullable|string',
+    ]);
 
-        // تشفير كلمة المرور
-        $validated['password'] = Hash::make($validated['password']);
+    $human = Human::create($validated);
+    return response()->json($human, 201);
+}
 
-        $human = Human::create($validated);
+public function update(Request $request, $id)
+{
+    $human = Human::findOrFail($id);
 
-        return response()->json($human, 201);
-    }
+    $validated = $request->validate([
+        'name'       => 'required|string',
+        'age'        => 'required|integer|min:0',
+        'location'   => 'nullable|string',
+        'email'      => 'required|email|unique:human,email,' . $id . ',human_id',
+        'creditcard' => 'nullable|string',
+    ]);
+
+
+    $human->fill($validated);
+    $human->save();
+
+    return response()->json($human);
+}
+
+public function destroy($id)
+{
+    $human = Human::findOrFail($id);
+    $human->delete();
+
+    return response()->json(['message' => 'Human deleted successfully']);
+}
+public function show($id)
+{
+    $human = Human::findOrFail($id);
+    return response()->json($human);
+}
 public function login(Request $request)
 {
     $validated = $request->validate([
@@ -48,10 +76,6 @@ public function login(Request $request)
         ], 404);
     }
 
-    // إضافة طباعة للتحقق
-    \Log::info('Input password: ' . $validated['password']);
-    \Log::info('Stored hash: ' . $human->password);
-    \Log::info('Check result: ' . Hash::check($validated['password'], $human->password));
 
     if (!Hash::check($validated['password'], $human->password)) {
         return response()->json([
@@ -66,5 +90,4 @@ public function login(Request $request)
         'user' => $human,
     ]);
 }
-
 }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './signup.css'
 
 function Signup() {
   const navigate = useNavigate();
@@ -44,7 +45,7 @@ function Signup() {
   };
 
   return (
-    <div className="w-[40vw] max-w-full mx-auto p-6 border border-gray-600 rounded-[20px] min-h-[50vh] flex flex-col justify-between">
+    <div className="signup-container">
       <h2 className="text-2xl font-bold mb-4">Sign Up</h2>
       <form onSubmit={handleSignup} className="space-y-4">
         <div>
