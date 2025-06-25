@@ -15,10 +15,12 @@ import {
   useTheme,
   useMediaQuery,
 } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const CreateTicket = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const navigate = useNavigate();
 
   const [ticketType, setTicketType] = useState('paid');
   const [ticketClass, setTicketClass] = useState('normal');
@@ -33,9 +35,34 @@ const CreateTicket = () => {
     description: '',
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({ ...formData, ticketType, ticketClass });
+    const apiBase = 'http://localhost:8000/api/tickets';
+    const form = new FormData();
+    form.append('quantity', formData.quantity);
+    form.append('description', formData.description);
+    form.append('seat', formData.seatRange);
+    form.append('sales', formData.sales);
+    form.append('paid', ticketType === 'paid');
+    form.append('free', ticketType === 'free');
+    // organizer_id is required by backend, you may need to get it from context or user
+    form.append('organizer_id', 1); // TODO: Replace 1 with actual organizer_id
+    // Add other fields as needed
+
+    try {
+      const res = await fetch(apiBase, {
+        method: 'POST',
+        body: form,
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        alert(JSON.stringify(err.errors || err.message || 'Error saving ticket'));
+      } else {
+        navigate('/tickets');
+      }
+    } catch (err) {
+      alert('Network error: ' + err.message);
+    }
   };
 
   const handleChange = (e) => {
