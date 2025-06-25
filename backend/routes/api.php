@@ -44,4 +44,7 @@ Route::prefix('users')->group(function () {
 // Authentication Routes
 Route::post('/login', [App\Http\Controllers\API\AuthController::class, 'login']);
 Route::post('/register', [App\Http\Controllers\API\AuthController::class, 'register']);
-Route::post('/logout', [App\Http\Controllers\API\AuthController::class, 'logout'])->middleware('auth:sanctum'); 
+Route::post('/logout', [App\Http\Controllers\API\AuthController::class, 'logout'])->middleware('auth:sanctum');
+
+// Ticket Routes
+Route::post('/tickets', [App\Http\Controllers\TicketController::class, 'store']); 
