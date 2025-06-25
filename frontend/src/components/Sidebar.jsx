@@ -3,12 +3,28 @@ import { Link, useLocation } from 'react-router-dom';
 import { LayoutDashboard, Ticket, Users, Calendar } from 'lucide-react';
 
 const navItems = [
-
-  { name: 'Dashboard', icon: LayoutDashboard, path: '/' },
-  { name: 'Tickets', icon: Ticket, path: '/ticket' ,
-    children:[{name:'TicketInventory',path:'/ticket/inventory'}]
+  {
+    name: 'Dashboard',
+    icon: LayoutDashboard,
+    path: '/',
   },
-  { name: 'Organizers', icon: Users, path: '/organizers' },
+  {
+    name: 'Tickets',
+    icon: Ticket,
+    path: '/ticket',
+    children: [
+      { name: 'Ticket Inventory', path: '/ticket/inventory' },
+      { name: 'Create Ticket', path: '/ticket/CreateTicket' }, // Added
+    ],
+  },
+  {
+    name: 'Organizers',
+    icon: Users,
+    path: '/organizers',
+    children: [
+      { name: 'Send Email', path: '/organizers/send-email' }, // Added
+    ],
+  },
   {
     name: 'Events',
     icon: Calendar,
@@ -32,7 +48,10 @@ const Sidebar = () => {
 
       <nav className="space-y-2">
         {navItems.map((item) => {
-const isActive = location.pathname === item.path || location.pathname.startsWith(item.path + '/');
+          const isActive =
+            location.pathname === item.path ||
+            location.pathname.startsWith(item.path + '/');
+
           return (
             <div key={item.name}>
               <Link
@@ -52,20 +71,20 @@ const isActive = location.pathname === item.path || location.pathname.startsWith
                   {item.children.map((child) => {
                     const isChildActive = location.pathname === child.path;
                     return (
-                        <Link
-                          key={child.name}
-                          to={child.path}
-                          className={`block text-sm px-3 py-2 rounded-md transition-colors ${
-                            isChildActive
-                              ? 'bg-accent-purple bg-opacity-10 text-accent-purple'
-                              : 'text-gray-400 hover:bg-card-bg'
-                          }`}
-                        >
-                          <span className="flex items-center space-x-2">
-                            <span className="w-2 h-2 bg-accent-purple rounded-full"></span>
-                            <span>{child.name}</span>
-                          </span>
-                        </Link>
+                      <Link
+                        key={child.name}
+                        to={child.path}
+                        className={`block text-sm px-3 py-2 rounded-md transition-colors ${
+                          isChildActive
+                            ? 'bg-accent-purple bg-opacity-10 text-accent-purple'
+                            : 'text-gray-400 hover:bg-card-bg'
+                        }`}
+                      >
+                        <span className="flex items-center space-x-2">
+                          <span className="w-2 h-2 bg-accent-purple rounded-full"></span>
+                          <span>{child.name}</span>
+                        </span>
+                      </Link>
                     );
                   })}
                 </div>

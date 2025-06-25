@@ -1,41 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { MapContainer, TileLayer, Marker } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
 import './CreateEvent.css';
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
-});
-
-function DraggableMarker({ position, onChangePosition }) {
-  const [pos, setPos] = useState(position);
-  const eventHandlers = {
-    dragend(e) {
-      const newPos = e.target.getLatLng();
-      setPos(newPos);
-      onChangePosition(newPos);
-    },
-  };
-
-  return <Marker draggable eventHandlers={eventHandlers} position={pos} />;
-}
 
 const initialFormData = {
   title: '', type: '', organizer: '', category: '', description: '',
   event_img: '', start_day: '', end_day: '',
   start_hour: '', end_hour: '', location: '',
-  locationCoords: { lat: 32.2211, lng: 35.2544 },
 };
 
 function CreateEvent() {
   const apiBase = 'http://localhost:8000/api/events';
   const navigate = useNavigate();
   const location = useLocation();
-  const [formData,  setFormData] = useState(initialFormData);
+  const [formData, setFormData] = useState(initialFormData);
   const [editId, setEditId] = useState(null);
 
   useEffect(() => {
@@ -58,68 +35,56 @@ function CreateEvent() {
         event_img: event.event_img || '', start_day: event.start_day || '',
         end_day: event.end_day || '', start_hour: event.start_hour || '',
         end_hour: event.end_hour || '', location: event.location || '',
-        locationCoords: event.location
-          ? {
-              lat: parseFloat(event.location.split(',')[0]),
-              lng: parseFloat(event.location.split(',')[1]),
-            }
-          : initialFormData.locationCoords,
       });
     } catch (err) {
       console.error(err);
     }
   };
 
-const handleChange = (e) => {
-  const { name, value, files } = e.target;
-
-  if (name === 'event_img') {
-    setFormData((prev) => ({
-      ...prev,
-      [name]: files[0],
-    }));
-  } else {
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  }
-};
-
-const handleSubmit = async (e) => {
-  e.preventDefault();
-
-  const form = new FormData();
-  form.append('title', formData.title);
-  form.append('type', formData.type);
-  form.append('organizer', formData.organizer);
-  form.append('category', formData.category);
-  form.append('description', formData.description);
-  form.append('start_day', formData.start_day);
-  form.append('end_day', formData.end_day);
-  form.append('start_hour', formData.start_hour);
-  form.append('end_hour', formData.end_hour);
-  form.append('location', `${formData.locationCoords.lat},${formData.locationCoords.lng}`);
-
-  if (formData.event_img) {
-    form.append('event_img', formData.event_img);
-  }
-
-  try {
-    const res = await fetch(editId ? `${apiBase}/${editId}` : apiBase, {
-      method: editId ? 'PUT' : 'POST',  
-      body: form,
-
-    });
-
-    if (!res.ok) {
-      const err = await res.json();
-      alert(JSON.stringify(err.errors || err.message || 'Error saving event'));
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+    if (name === 'event_img') {
+      setFormData((prev) => ({ ...prev, [name]: files[0] }));
     } else {
-      navigate('/events');
+      setFormData((prev) => ({ ...prev, [name]: value }));
     }
-  } catch (err) {
-    alert('Network error: ' + err.message);
-  }
-};
+  };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const form = new FormData();
+    form.append('title', formData.title);
+    form.append('type', formData.type);
+    form.append('organizer', formData.organizer);
+    form.append('category', formData.category);
+    form.append('description', formData.description);
+    form.append('start_day', formData.start_day);
+    form.append('end_day', formData.end_day);
+    form.append('start_hour', formData.start_hour);
+    form.append('end_hour', formData.end_hour);
+    form.append('location', formData.location);
+
+    if (formData.event_img) {
+      form.append('event_img', formData.event_img);
+    }
+
+    try {
+      const res = await fetch(editId ? `${apiBase}/${editId}` : apiBase, {
+        method: editId ? 'PUT' : 'POST',
+        body: form,
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        alert(JSON.stringify(err.errors || err.message || 'Error saving event'));
+      } else {
+        navigate('/events');
+      }
+    } catch (err) {
+      alert('Network error: ' + err.message);
+    }
+  };
 
   return (
     <form className="container-fluid mt-4" onSubmit={handleSubmit}>
@@ -168,16 +133,11 @@ const handleSubmit = async (e) => {
       </div>
 
       <div className="mb-3">
-        <div className="bg-secondary a" style={{ height: '300px', borderRadius: '8px', width: '100%' }}>
-          <MapContainer center={formData.locationCoords} zoom={13} style={{ height: '100%', width: '100%' }}>
-            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-            <DraggableMarker position={formData.locationCoords} onChangePosition={(pos) => setFormData(f => ({ ...f, locationCoords: pos }))} />
-          </MapContainer>
-        </div>
+        <input name="location" value={formData.location} onChange={handleChange} placeholder="Location (e.g. Nablus)" className="form-control a placeholder-white" />
       </div>
 
       <div className="mb-3">
-        <button type="submit" className="btn btn-primary w-100">Create</button>
+        <button type="submit" className="btn btn-primary w-100">{editId ? 'Update' : 'Create'}</button>
       </div>
     </form>
   );

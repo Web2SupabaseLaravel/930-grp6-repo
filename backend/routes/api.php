@@ -17,6 +17,7 @@
 
 
     Route::post('/login', [HumanController::class, 'login']);
+
     Route::apiResource('human', HumanController::class);
     Route::apiResource('events',EventController::class);
     Route::apiResource('ticket',TicketController::class);

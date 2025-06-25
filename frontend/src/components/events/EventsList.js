@@ -34,13 +34,8 @@ function EventsList() {
   return (
     <div className="p-4 text-white">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-bold text-accent-purple">Events List</h2>
-        <button
-          onClick={() => navigate('/events/create')}
-          className="bg-accent-purple text-white px-4 py-2 rounded hover:bg-accent-purple/80 transition"
-        >
-          + Add Event
-        </button>
+        <h2 className="text-xl font-bold text-accent-purple">Events</h2>
+
       </div>
 
       <div className="space-y-4">
@@ -55,9 +50,9 @@ function EventsList() {
 
                 <div className="space-x-2">
                   <button
-                    onClick={() => navigate(`/eventdetails/${event.event_id}`)}  // ✅ الصحيح
+                    onClick={() => navigate(`/eventdetails/${event.event_id}`)}  
                       className="text-sm px-3 py-1 rounded bg-green-600 hover:bg-green-500 transition"
-                                                                                                   >
+                  >
                         Event Details
                   </button>
                   <button

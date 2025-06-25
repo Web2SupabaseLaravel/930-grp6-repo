@@ -9,9 +9,11 @@ import AdminCRUD from './components/admins/Admin';
 import OrganizerCRUD from './components/organizers/Organizer';
 import AttendeeCRUD from './components/attendees/Attendee';
 import TicketInventory from './components/ticket/TicketInventory';
-import SignUp from './components/signup/signup'; 
-import Signin from './components/signin/signin'; 
-import EventDetailsPage from './components/eventdetailes/eventdetailes'; 
+import SignUp from './components/auth/signup'; 
+import Signin from './components/auth/signin'; 
+import EventDetailsPage from './components/events/eventdetailes'; 
+import SendEmail from './components/emails/SendEmail';
+import CreateTicket from './components/ticket/CreateTicket';
 import './App.css';
 
 function App() {
@@ -19,7 +21,9 @@ function App() {
     <Router>
       <Layout>
         <Routes>
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/ticket/CreateTicket" element={<CreateTicket />} />
+          <Route path="/organizers/send-email" element={<SendEmail />} />
+          <Route path="/" element={<EventsList/>} />
           <Route path="/tickets" element={<div>Tickets Page</div>} />
           <Route path="/organizers" element={<div>Organizers Page</div>} />
           <Route path="/events" element={<EventsList />} />
